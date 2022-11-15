@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from SendGridMail import sendMail
 import ibm_db
 
 conn = ibm_db.connect("DATABASE=bludb;HOSTNAME=2f3279a5-73d1-4859-88f0-a6c3e6b4b907.c3n41cmd0nqnrk39u98g.databases.appdomain.cloud;PORT=30756;SECURITY=SSL;SSLServerCertificate=DigiCertGlobalRootCA.crt;UID=gmx70809;PWD=ogHRxZYkgsrkgHrK",'','')
@@ -45,9 +46,12 @@ def register():
       ibm_db.bind_param(prep_stmt, 6, address)
       ibm_db.bind_param(prep_stmt, 7, pincode)
       ibm_db.execute(prep_stmt)
-      return render_template('login.html',success="You can login")
+      
+      sendMail(email, 'Hello {}, <br>Thank you for Registering!! 🙂'.format(username))
+
+      return render_template('login.html')
     else:
-      return render_template('register.html',error='Invalid Credentials')
+      return render_template('register.html')
 
   return render_template('register.html')
 
@@ -85,16 +89,23 @@ def login():
 
 @app.route("/donor", methods=['GET','POST'])
 def addDonor():
-  print('qqq')
   if request.method == 'POST':
-    print(session['email'])
+    # Work have to be completed
+
+    # sendMail(session['email'], 'Thank you🙏, your request has beed added!')
+    # Uncomment it when its done
+
     return render_template('registered.html')
   return render_template('donor.html', name='Donor Dashboard', msg='I want to Donate')
 
 @app.route("/recipient", methods=['GET','POST'])
 def addRequest():
   if request.method == 'POST':
-    print('hi')
+    # Work have to be completed
+
+    # sendMail(session['email'], 'Your Request has been added Successfully')
+    # Uncomment it when its done
+
     return render_template('userList.html')
   return render_template('recipient.html', name='Receiver Dashboard', msg='Request for Plasma')
 
